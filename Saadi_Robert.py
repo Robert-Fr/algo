@@ -1,5 +1,5 @@
 #la dimension de la matrice de similarité = nombre de document, dans notre exemple 10
-N=10
+N=9
 #pour accéder a sim_mat[i][j] il faut faire : (i * N) + j
 sim_mat = [10,6,0,0,0,0,0,0,0,6,10,0,0,0,0,0,0,0,0,0,10,5,3,3,1,1,0,0,0,5,10,1,2,1,1,0,0,0,3,1,10,4,1,2,0,0,0,3,2,4,10,1,4,0,0,0,1,1,1,1,10,1,0,0,0,1,1,2,4,1,10,0,0,0,0,0,0,0,0,0,10]
 
@@ -34,20 +34,27 @@ def partitionement_hierarchique_aglommeratif ( N,sim_mat) :
     L = []
     
     #pour toute les itérations :
-    for k in range(N-1):
+    for k in range(N):
     
         #on prend la liste des classes active
+        list_classe_active=[]
         for i in range(N):
             if I[i]==i :
                 list_classe_active.append(i)
         #on prend la classe active qui a la plus grosse similarité possible avec une autre classe
-        sim_max=0
-        ind_sim_max=0
+        sim_max=-1
+        ind_sim_max=-1
         for i in list_classe_active:
+        #for i in range(N):
             (sim,ind)=P[i]
             if  sim>sim_max:
                 sim_max=sim
                 ind_sim_max=ind
+                
+        #print("liste active a l'iteration " + str(k) + " : " )
+        #for i in range(len(list_classe_active)) :
+        #    print(list_classe_active[i])
+        
         #on a i1
         i1=ind_sim_max
         #i2 est la classe à laquelle appartient le document qui est le plus proche de i1
@@ -57,6 +64,7 @@ def partitionement_hierarchique_aglommeratif ( N,sim_mat) :
         P[i1]=(-1,ind)
         #on Fusionne i1 et i2 :
         L.append( (i1,i2) )
+        
         
         for i in range(N):
             #on met à jour les similarités pour les éléments qui n'ont pas été fusionnés dans cette itération :
@@ -80,8 +88,8 @@ def partitionement_hierarchique_aglommeratif ( N,sim_mat) :
     #on retourne la liste des fusions obtenue
     return L
         
-    
+print (len(sim_mat))
 Liste_fusion =partitionement_hierarchique_aglommeratif(N,sim_mat)
-print(L)
+print(Liste_fusion)
     
     
