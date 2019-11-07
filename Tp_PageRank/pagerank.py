@@ -1,8 +1,9 @@
 import numpy as np
+from scipy.spatial import distance
 
 f=open("tiny-graph.txt","r")
 fact_amort=0.85
-epsilon=10^(-3)
+epsilon=10**(-5)
 f1=f.readlines()
 N=int (f1[0])
 del(f1[0])
@@ -15,8 +16,6 @@ for x in f1:
         indice_colonne=int(j)
         A[ind_ligne,indice_colonne]=1
 
-for i in range (N) :
-    print(A [i])
 
 
 P=np.zeros((N,N), dtype=float)
@@ -30,8 +29,7 @@ for i in range (N):
         else :
             P[i,j]=1/N
 
-for i in range (N) :
-    print(P[i])
+
 
 R=np.zeros(N)
 for i in range (N):
@@ -41,15 +39,24 @@ R_suivant=np.zeros(N)
 
 l=0
 
-while(True) :
-    if l==0 :
-        R_suivant=np.dot(R,P)
-        l=l+1
-    else :
-        if (R_suivant-R) <= epsilon :
-            break
-        else :
-            R_suivant = np.dot(R,P)
-            l = l + 1
+def dist(x,y):
+    return np.sqrt(np.sum((x-y)**2))
+
+R_suivant=np.dot(R,P)
+print(R_suivant)
+
+while (dist(R_suivant,R) >= epsilon) :
+    l=l+1
+    print(l)
+    print(R)
+    print(R_suivant)
+    print(dist(R_suivant,R))
+
+    R = R_suivant
+    R_suivant = np.dot(R,P)
+     #print(R_suivant)
+
 
 print(R)
+
+#1. On observe que le nombre d'itérations augmente sensiblement quand epsilon diminue
